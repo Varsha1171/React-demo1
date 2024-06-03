@@ -1,0 +1,7 @@
+.BtnClass{
+    color: white;
+    background-color: blueviolet;
+    border-radius: 20%;
+    padding: 10px;
+    align-items: center;
+}
