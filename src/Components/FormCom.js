@@ -1,4 +1,4 @@
-import React ,{useState} from 'react';
+import React ,{useState , useRef} from 'react';
 import './FormCom.css';
 import styled from 'styled-components';
 import ErrorModel from './ErrorModel';
@@ -11,38 +11,41 @@ align-items: center;
 text:"Add User";
 `;
 const FormCom = (props) => {
-    const [user,setUserName]=useState({
-        Username:'',
-        Age:''
-    });
+    const enteredUsername=useRef();
+    const enteredAge=useRef();
+    // const [user,setUserName]=useState({
+    //     Username:'',
+    //     Age:''
+    // });
     const [error,setError]=useState();
 
-    const userNameChangeHandler=(event)=>{
-        setUserName({
-            ...user,
-            Username:event.target.value,
-        });
-        console.log(user);
-    };
-    const ageChangeHandler=(event)=>{
-        setUserName({
-            ...user,
-            Age:event.target.value,
-        });
-        console.log(user);
+    // const userNameChangeHandler=(event)=>{
+    //     setUserName({
+    //         ...user,
+    //         Username:event.target.value,
+    //     });
+    //     console.log(user);
+    // };
+    // const ageChangeHandler=(event)=>{
+    //     setUserName({
+    //         ...user,
+    //         Age:event.target.value,
+    //     });
+    //     console.log(user);
 
-    };
+    // };
 
     const submitHandler=(event)=>{
         event.preventDefault();
-        if(user.Username.trim().length===0||user.Age.trim()===0){
+console.log(enteredUsername.current.value);
+        if(enteredUsername.current.value.trim().length===0||enteredAge.current.value.trim()===0){
             setError({
                 title:"Invalid Input!",
                 msg:"Username and Age fields are required!"
             });
             return;
         }
-        if(+user.Age<1){
+        if(+enteredAge.current.value<1){
             setError({
                 title:"Age is Incorrect!",
                 msg:"Age is  must be positive(>0)",
@@ -50,15 +53,17 @@ const FormCom = (props) => {
             return;
         }
         const newUser={
-            Username:user.Username,
-            Age:user.Age,
+            Username:enteredUsername.current.value,
+            Age:enteredAge.current.value,
         }
         console.log(newUser);
         props.onGetNewUserData(newUser);
-        setUserName({
-            Username:" ",
-            Age:" "
-        });
+        // setUserName({
+        //     Username:" ",
+        //     Age:" "
+        // });
+        enteredUsername.current.value='';
+        enteredAge.current.value='';
     };
     const errorHandler = ()=>{
         setError(null);
@@ -70,11 +75,11 @@ const FormCom = (props) => {
                 <div className="DivClass">
                     <label>Username</label>
                     <br></br>
-                    <input type='text' value={user.Username} onChange={userNameChangeHandler}></input>
+                    <input type='text' ref={enteredUsername}></input>
                     <br></br>
                     <label>Age(Years)</label>
                     <br></br>
-                    <input type='number' value={user.Age} onChange={ageChangeHandler}></input>
+                    <input type='number'  ref={enteredAge}></input>
                     <br></br>
                     <Button>Add User</Button>
                 </div>
